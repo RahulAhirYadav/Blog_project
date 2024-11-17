@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<!-- blog/templates/blog/post_detail.html -->
+<div class="container text-black">
+<h2>{{ post.title }}</h2>
+<pre>by {{ post.author }} on {{ post.created_at }}</pre>
+<pre>{{ post.content }}</pre>
+</div>
+<div class="container ">
+
+    <div class="row">
+    <div class="col-xl-4 col-md-6 col-xxl-3 col-lg-4">
+<p><strong>Likes:</strong> {{ post.like_count }}</p>
+    
+<!-- Like/Unlike button -->
+<form action="{% url 'toggle_like' post.id %}" method="POST">
+    {% csrf_token %}
+    <button type="submit">
+        {% if user in post.likes.all %}
+        <i class="fas fa-heart"></i> 
+        {% else %}
+        <i class="far fa-heart"></i> <img src="https://i.pinimg.com/originals/6f/8b/5c/6f8b5c2be3d3c7b19ffcaf1483fa1374.png" width="100px">
+        {% endif %}
+    </button>
+</form>
+</div>
+<div class="col-xl-4 col-md-6 col-xxl-3 col-lg-4">
+ <i class="fas fa-comments"></i> {{ comments.count }} Comments
+<h3>Add a comment</h3>
+<form method="POST" >
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" align="center">Add Comment</button>
+</form>
+<h3>Comments</h3>
+
+{% for comment in comments %}
+    <p>{{ comment.author }}: {{ comment.content }}</p>
+    
+{% endfor %}
+
+
+</div>
+</div>
+</div>
+{% endblock %}
